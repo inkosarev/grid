@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router from "../router/index"
+import axios from 'axios'
+import router from '../router/index'
+import Order from '../models/Order'
 
 Vue.use(Vuex)
 
@@ -34,6 +36,7 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        // Безопасный запрос
         async query(context, payload) {
             try {
                 console.table(payload)
@@ -43,36 +46,36 @@ export default new Vuex.Store({
             }
         },
 
+        // Аутентификация
         async authenticate(context, payload) {
-            let result = await fetch(context.state.api.authenticate, {
+            let result = await axios({
+                url: context.state.api.authenticate,
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
+                data: {
                     email: payload.email,
                     password: payload.password
-                })
+                }
             })
 
-            if (result.ok) {
-                result = await result.json()
-                context.commit('SET_ACCESS', result.access)
-                context.commit('SET_REFRESH', result.refresh)
+            if (result.statusText === 'OK') {
+                context.commit('SET_ACCESS', result.data.access)
+                context.commit('SET_REFRESH', result.data.refresh)
                 context.commit('SET_AUTHENTICATED', true)
                 await router.push('/grid')
             }
         },
 
-        async checkOrders(context) {
-            let result = await fetch(context.state.api.orders, {
+        // Проверка доступности данных заказов или их получение
+        async checkOrders(context, payload) {
+            let result = await axios({
+                url: context.state.api.orders,
                 method: 'HEAD',
                 headers: {
                     authorization: `JWT ${context.state.access}`
                 }
             })
 
-            if (!result.ok) {
+            if (result.statusText !== 'OK') {
                 await context.dispatch('query', {
                     action: 'refreshToken',
                     payload: context.state.refresh
@@ -81,40 +84,35 @@ export default new Vuex.Store({
 
             await context.dispatch('query', {
                 action: 'getOrders',
-                payload: {
-                    limit: 10,
-                    offset: 0,
-                    search: ''
-                }
+                payload
             })
         },
 
+        // Запрос данных заказов
         async getOrders(context, payload) {
+            console.warn(payload)
             const params = `?limit=${payload.limit}&offset=${payload.offset}&search=${payload.search}`
-            let result = await fetch(context.state.api.orders + params, {
+            let result = await axios({
+                url: context.state.api.orders + params,
                 method: 'GET',
                 headers: {
-                    authorization: `JWT ${context.state.access}`,
-                    'Content-Type': 'application/json'
+                    authorization: `JWT ${context.state.access}`
                 }
             })
-
-            result = await result.json()
-            context.commit('SET_ORDERS', result.results)
+            const orders = result.data.results.map(order => {
+                return new Order(order)
+            })
+            context.commit('SET_ORDERS', orders)
         },
 
+        // Обновление токена
         async refreshToken(context, refresh) {
-            let result = await fetch(context.state.api.refreshToken, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    refresh
-                })
+            let result = await axios({
+                url: context.state.api.refreshToken,
+                methods: 'POST',
+                data: { refresh }
             })
-            result = await result.json()
-            context.commit('SET_ACCESS', result.access)
+            context.commit('SET_ACCESS', result.data.access)
         }
     }
 })

@@ -1,15 +1,10 @@
-<template>
-    <div>
-        <form @submit.prevent="onSubmit">
-            <label>Email:</label>
-            <input type="text" v-model="email">
-
-            <label>Password:</label>
-            <input type="password" v-model="password">
-
-            <input type="submit">
-        </form>
-    </div>
+<template lang="pug">
+        form(@submit.prevent='onSubmit')
+            label Email:
+            input(type='text', v-model='email')
+            label Password:
+            input(type='password', v-model='password')
+            input(type='submit')
 </template>
 
 <script>
@@ -24,6 +19,7 @@ export default {
     },
 
     computed: {
+        // Аутентификационные данные
         credentials() {
             return {
                 email: this.email,
@@ -33,18 +29,19 @@ export default {
     },
 
     async created() {
+        // Попытка аутентификации с хранимыми учетными данными
         const credentials = localStorage.getItem('credentials')
         if (credentials) {
             await this.$store.dispatch('query', {
                 action: 'authenticate',
                 payload: JSON.parse(credentials)
             })
-
         }
     },
 
     methods: {
         async onSubmit() {
+            // Аутентификация с данными формы
             localStorage.setItem('credentials', JSON.stringify(this.credentials))
             await this.$store.dispatch('query', {
                 action: 'authenticate',
