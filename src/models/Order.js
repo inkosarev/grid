@@ -7,8 +7,31 @@ export default class Order {
     total_price
     items
 
+    static getRowHeader() {
+        return [
+            'ID',
+            'Товары',
+            'Дата заказа',
+            'Оплачено',
+            'Доставлено',
+            'Покупатель',
+            'Стоимость',
+        ]
+    }
+
+    getRowFields() {
+        return {
+            order_id: this.order_id,
+            count: this.items.length,
+            create_date: this.create_date,
+            is_paid: this.is_paid,
+            is_shipped: this.is_shipped,
+            buyer: this.buyer,
+            total_price: this.total_price
+        }
+    }
+
     constructor(order) {
-        this.buyer = order.buyer
         this.create_date = order.create_date
         this.is_paid = order.is_paid
         this.is_shipped = order.is_shipped

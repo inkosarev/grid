@@ -1,19 +1,29 @@
 <template lang="pug">
     thead
-        tr
+        div
             td(colspan='100%')
                 h1 Таблица заказов
                 button Отправления
                 button Экспортировать
-        tr
+        div
             td(colspan='100%')
                 button Фильтр
                 input(@input='searchFilter', type='text')
+        div
+            td(v-for='title of Order.getRowHeader()') {{ title }}
 </template>
 
 <script>
+import Order from '../models/Order'
+
 export default {
     name: 'TableHeader',
+
+    data() {
+        return {
+            Order: Order
+        }
+    },
 
     methods: {
         searchFilter(e) {

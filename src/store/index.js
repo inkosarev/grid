@@ -38,17 +38,13 @@ export default new Vuex.Store({
     actions: {
         // Безопасный запрос
         async query(context, payload) {
-            try {
-                console.table(payload)
-                await context.dispatch(payload.action, payload.payload)
-            } catch (e) {
-                console.error(e)
-            }
+            context.dispatch(payload.action, payload.payload)
+                .catch(e => console.error(e))
         },
 
         // Аутентификация
         async authenticate(context, payload) {
-            let result = await axios({
+            const result = await axios({
                 url: context.state.api.authenticate,
                 method: 'POST',
                 data: {
