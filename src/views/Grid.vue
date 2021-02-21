@@ -1,5 +1,5 @@
 <template lang="pug">
-    table
+    div
         table-header
         table-row(v-for='order in $store.state.orders', :order='order')
 </template>

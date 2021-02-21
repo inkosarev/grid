@@ -1,3 +1,5 @@
+import OrderItem from './OrderItem'
+
 export default class Order {
     buyer
     create_date
@@ -7,6 +9,10 @@ export default class Order {
     total_price
     items
 
+    /**
+     * Возвращает массив заголовков для таблицы
+     * @returns Array<String>
+     * */
     static getRowHeader() {
         return [
             'ID',
@@ -19,6 +25,10 @@ export default class Order {
         ]
     }
 
+    /**
+     * Возвращает простые поля заказа
+     * @returns Object
+     * */
     getRowFields() {
         return {
             order_id: this.order_id,
@@ -38,6 +48,8 @@ export default class Order {
         this.order_id = order.order_id
         this.total_price = order.total_price
         this.buyer = order.buyer
-        this.items = order.items
+        this.items = order.items ? order.items.map(item => {
+            return new OrderItem(item)
+        }) : []
     }
 }

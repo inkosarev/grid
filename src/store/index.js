@@ -86,7 +86,6 @@ export default new Vuex.Store({
 
         // Запрос данных заказов
         async getOrders(context, payload) {
-            console.warn(payload)
             const params = `?limit=${payload.limit}&offset=${payload.offset}&search=${payload.search}`
             let result = await axios({
                 url: context.state.api.orders + params,

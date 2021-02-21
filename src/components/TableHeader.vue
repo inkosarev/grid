@@ -1,16 +1,16 @@
 <template lang="pug">
-    thead
+    div(class="header")
         div
-            td(colspan='100%')
+            div(class="td" colspan='100%')
                 h1 Таблица заказов
                 button Отправления
                 button Экспортировать
         div
-            td(colspan='100%')
+            div(class="td" colspan='100%')
                 button Фильтр
                 input(@input='searchFilter', type='text')
         div
-            td(v-for='title of Order.getRowHeader()') {{ title }}
+            div(class="td" v-for='title of Order.getRowHeader()') {{ title }}
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
 
     data() {
         return {
-            Order: Order
+            Order
         }
     },
 
@@ -46,5 +46,9 @@ export default {
 <style>
     h1 {
         display: inline;
+    }
+
+    .header {
+        width: 100%;
     }
 </style>

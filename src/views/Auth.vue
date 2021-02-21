@@ -12,8 +12,6 @@ export default {
     name: 'Auth',
     data() {
         return {
-            // email: 'test@zonesmart.ru',
-            // password: '4815162342test'
             email: JSON.parse(localStorage.getItem('credentials')).email,
             password: JSON.parse(localStorage.getItem('credentials')).password
         }
@@ -22,8 +20,6 @@ export default {
     computed: {
         // Активность кнопки отправки аутентификационных данных
         disabled() {
-            // const storedEmail = localStorage.getItem('email')
-            // const storedPassword = localStorage.getItem('password')
             return !(this.email.length && this.password.length)
         },
         // Аутентификационные данные

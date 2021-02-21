@@ -1,15 +1,16 @@
 <template lang="pug">
-    div
-        tr
-            td(v-for='field of order.getRowFields()') {{ field }}
-        table-row-item(:items='order.items')
+    div(class="row")
+        div(class="td" v-for='field of order.getRowFields()') {{ field }}
+        table-row-items(:items='order.items')
+        br
 </template>
 
 <script>
-import TableRowItem from '../components/TableRowItem'
+import TableRowItems from '../components/TableRowItems'
+
 export default {
     name: 'TableRow',
-    components: {TableRowItem},
+    components: { TableRowItems },
     props: ['order']
 }
 </script>
