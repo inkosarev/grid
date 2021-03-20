@@ -1,18 +1,56 @@
 import OrderItem from './OrderItem'
 
+/**
+ * @class
+ * @classdesc класс заказа
+ */
 export default class Order {
-    buyer
-    create_date
-    is_paid
-    is_shipped
+    /**
+     * Идентификатор заказа
+     * @type {String}
+     */
     order_id
+
+    /**
+     * Заказчик
+     * @type {String}
+     */
+    buyer
+
+    /**
+     * Дата создания заказа
+     * @type {Date}
+     */
+    create_date
+
+    /**
+     * Статус оплаты заказа
+     * @type {Boolean}
+     */
+    is_paid
+
+    /**
+     * Статус доставки заказа
+     * @type {Boolean}
+     */
+    is_shipped
+
+    /**
+     * Общая стоимость заказа
+     * @type {Number}
+     */
     total_price
+
+    /**
+     * Позиции заказа
+     * @type {Array<OrderItem>}
+     */
     items
 
     /**
      * Возвращает массив заголовков для таблицы
      * @returns Array<String>
-     * */
+     */
     static getRowHeader() {
         return [
             'ID',
@@ -28,7 +66,7 @@ export default class Order {
     /**
      * Возвращает простые поля заказа
      * @returns Object
-     * */
+     */
     getRowFields() {
         return {
             order_id: this.order_id,
@@ -41,6 +79,10 @@ export default class Order {
         }
     }
 
+    /**
+     * @constructs
+     * @param {Object} order - объект заказа
+     */
     constructor(order) {
         this.create_date = order.create_date
         this.is_paid = order.is_paid

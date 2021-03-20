@@ -16,7 +16,8 @@ export default new Vuex.Store({
         authenticated: false,
         access: null,
         refresh: null,
-        orders: []
+        orders: [],
+        selected_orders: []
     },
     mutations: {
         SET_ACCESS(state, access) {
@@ -33,6 +34,14 @@ export default new Vuex.Store({
 
         SET_AUTHENTICATED(state, authenticated) {
             state.authenticated = authenticated || false
+        },
+
+        SELECT_ORDER(state, id) {
+            state.selected_orders.push(id)
+        },
+
+        UNSELECT_ORDER(state, id) {
+            state.selected_orders.splice(state.orders.indexOf(id), 1)
         }
     },
     actions: {

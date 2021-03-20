@@ -1,7 +1,7 @@
 <template lang="pug">
-    div
+    div(class="table")
         table-header
-        table-row(v-for='order in $store.state.orders', :order='order')
+        table-row(v-for="order in $store.state.orders" :order="order" :class="{loading: is_loading }")
 </template>
 
 <script>
@@ -18,12 +18,14 @@ export default {
 
     data() {
         return {
-            offset: 0
+            offset: 0,
+            is_loading: true
         }
     },
 
     async created() {
         if (!this.$store.state.authenticated) {
+            console.log('/')
             // Редирект на главную если пользователь не аутентифицирован
             await this.$router.push('/')
         } else {
@@ -36,13 +38,24 @@ export default {
                     search: ''
                 }
             })
+            this.is_loading = !this.is_loading
         }
     }
 }
 </script>
 
-<style lang="scss">
-    table {
-        border: 1px solid #000;
-    }
+<style lang="sass">
+    .table
+        background-color: #f5f8fb
+
+    .tr
+        border-top: 1px solid #f0f0f0
+        margin: 10px auto
+        background-color: #fff
+
+    .td
+        display: inline-block
+
+    .loading
+        display: none
 </style>

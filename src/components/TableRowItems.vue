@@ -1,6 +1,7 @@
 <template lang="pug">
-    div
-        div(class="td" v-for="title in OrderItem.getRowItemsHeader()") {{ title }}
+    div(class="row-items")
+        div(class="row-items-header")
+            div(class="td" v-for="title in OrderItem.getRowItemsHeader()") {{ title }}
         table-row-item(v-for="item in items" :item="item")
 </template>
 
@@ -22,5 +23,7 @@ export default {
 </script>
 
 <style lang="sass">
-
+    .row-items
+        background-color: #f5f8fb
+        padding: 60px
 </style>

@@ -1,7 +1,6 @@
 <template lang="pug">
-    div
-
-        img(:src='item.main_image || "https://via.placeholder.com/40"')
+    div(class="row-item")
+        img(:src='item.main_image || "placeholder.svg"')
         div(class="td") {{ item.title }}
         div(class="td") {{ item.sku }}
         div(class="td") {{ item.quantity }}
@@ -20,4 +19,8 @@ export default {
 <style lang="sass">
     .item-row
         background-color: red
+
+    img
+        width: 40px
+        height: 40px
 </style>

@@ -12,8 +12,8 @@ export default {
     name: 'Auth',
     data() {
         return {
-            email: JSON.parse(localStorage.getItem('credentials')).email,
-            password: JSON.parse(localStorage.getItem('credentials')).password
+            email: '',
+            password: ''
         }
     },
 
@@ -32,12 +32,18 @@ export default {
     },
 
     async created() {
+        const credentials = JSON.parse(sessionStorage.getItem('credentials'))
+
+        if (credentials) {
+            this.email = credentials.email
+            this.password = credentials.password
+        }
+
         // Попытка аутентификации с хранимыми учетными данными
-        const credentials = localStorage.getItem('credentials')
         if (credentials && !this.disabled) {
             await this.$store.dispatch('query', {
                 action: 'authenticate',
-                payload: JSON.parse(credentials)
+                payload: credentials
             })
         }
     },
@@ -45,7 +51,8 @@ export default {
     methods: {
         async onSubmit() {
             // Аутентификация с данными формы
-            localStorage.setItem('credentials', JSON.stringify(this.credentials))
+            sessionStorage.setItem('credentials', JSON.stringify(this.credentials))
+
             await this.$store.dispatch('query', {
                 action: 'authenticate',
                 payload: this.credentials
